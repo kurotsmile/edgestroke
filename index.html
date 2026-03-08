@@ -160,14 +160,53 @@ canvas, img.preview, svg {
   main, header { padding: 16px; }
 }</style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"EdgeStroke","description":"Draw edge-based outlines around subjects for sticker and cutout style.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","url":"https://edgestroke.web.app"}</script>
+<style id="round2-style">
+body.theme-shell::before, body.theme-shell::after {
+  content:"";
+  position:fixed;
+  z-index:-1;
+  width:320px;
+  height:320px;
+  border-radius:60% 40% 59% 41% / 37% 45% 55% 63%;
+  background:linear-gradient(122deg, #ff512f22, #2ec4b622);
+  filter: blur(1px);
+}
+body.theme-shell::before { top:-90px; right:-90px; }
+body.theme-shell::after { bottom:-110px; left:-110px; }
+.tool-ribbon {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  margin:0 0 12px;
+  border:1px solid color-mix(in srgb, #ff512f 32%, #ffffff);
+  background:linear-gradient(120deg, #ff512f14, #2ec4b610);
+  border-radius:12px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+.ribbon-ic {
+  width:18px;
+  height:18px;
+  stroke:color-mix(in srgb, #ff512f 65%, #102030);
+  fill:none;
+  stroke-width:1.9;
+}
+header h1 { position: relative; z-index: 1; }
+header .sub { position: relative; z-index: 1; }
+main { position: relative; overflow: visible; }
+button { min-height: 42px; }
+.theme-shell main{border-style:dashed}.theme-shell .tool-ribbon{border-radius:999px;display:inline-flex;width:auto;padding:8px 14px;margin-bottom:10px}
+</style>
 </head>
-<body>
+<body class="theme-shell">
   <div class="container">
     <header>
       <h1>Edge Detect Stroke Around Subject</h1>
       <p class="sub">Draw edge-based outlines around subjects for sticker and cutout style.</p>
     </header>
     <main>
+      <div class="tool-ribbon"><svg viewBox="0 0 24 24" class="ribbon-ic"><path d="M4 8l4-4h8l4 4v8l-4 4H8l-4-4z"/><path d="M8 12h8"/></svg><span>Subject Edge Outliner</span></div>
       <input id="file" type="file" accept="image/*">
     <div class="grid two" style="margin-top:10px"><div><label>Stroke Color</label><input id="col" type="color" value="#00d084"></div><div><label>Threshold</label><input id="th" type="range" min="10" max="120" value="40"></div></div>
     <div style="margin-top:10px" class="grid two"><button id="apply">Detect Edge Stroke</button><button id="save">Download</button></div>
