@@ -198,6 +198,76 @@ main { position: relative; overflow: visible; }
 button { min-height: 42px; }
 .theme-shell main{border-style:dashed}.theme-shell .tool-ribbon{border-radius:999px;display:inline-flex;width:auto;padding:8px 14px;margin-bottom:10px}
 </style>
+<style id="round3-style">
+.quick-actions {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  background: linear-gradient(180deg, #fff, #f9fcff);
+}
+.quick-actions h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.quick-btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+  border-radius: 11px;
+  padding: 10px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.quick-btn:hover { transform: translateY(-1px); border-color: var(--g1); }
+.seo-links {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  background: #fff;
+}
+.seo-links h3 { margin: 0 0 8px; font-size: 1rem; }
+.link-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+.link-grid a {
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: var(--text);
+  background: linear-gradient(180deg, #fff, #fbfdff);
+  transition: border-color .15s ease, transform .15s ease;
+}
+.link-grid a:hover { border-color: var(--g1); transform: translateY(-1px); }
+.tool-ribbon, .quick-actions, .seo-links { opacity: .01; transform: translateY(8px); transition: .4s ease; }
+.tool-ribbon.revealed, .quick-actions.revealed, .seo-links.revealed { opacity: 1; transform: translateY(0); }
+.ux-toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  background: #102439;
+  color: #fff;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: .9rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: .2s ease;
+  pointer-events: none;
+  z-index: 20;
+}
+.ux-toast.show { opacity: 1; transform: translateY(0); }
+</style>
 </head>
 <body class="theme-shell">
   <div class="container">
@@ -211,6 +281,8 @@ button { min-height: 42px; }
     <div class="grid two" style="margin-top:10px"><div><label>Stroke Color</label><input id="col" type="color" value="#00d084"></div><div><label>Threshold</label><input id="th" type="range" min="10" max="120" value="40"></div></div>
     <div style="margin-top:10px" class="grid two"><button id="apply">Detect Edge Stroke</button><button id="save">Download</button></div>
     <canvas id="cv" width="900" height="600" style="margin-top:10px"></canvas>
+    <section class="quick-actions"><h3>Quick Edge Strength</h3><div class="quick-grid"><button type="button" class="quick-btn" data-action="edge_soft">Soft Edge</button><button type="button" class="quick-btn" data-action="edge_strong">Strong Edge</button><button type="button" class="quick-btn" data-action="edge_apply">Apply Stroke</button></div></section>
+    <section class="seo-links"><h3>Explore More Free Web Tools</h3><div class="link-grid"><a href="https://palettekit.web.app" target="_blank" rel="noopener">PaletteKit</a><a href="https://csv2json.web.app" target="_blank" rel="noopener">CSV2JSON</a><a href="https://qrquick.web.app" target="_blank" rel="noopener">QRQuick</a><a href="https://timeflip.web.app" target="_blank" rel="noopener">TimeFlip</a><a href="https://svgpathmini.web.app" target="_blank" rel="noopener">SVGPathMini</a><a href="https://whatdevice.web.app" target="_blank" rel="noopener">WhatDevice</a><a href="https://typerush.web.app" target="_blank" rel="noopener">TypeRush</a><a href="https://gridcollage.web.app" target="_blank" rel="noopener">GridCollage</a><a href="https://photoprintfit.web.app" target="_blank" rel="noopener">PhotoPrintFit</a><a href="https://palettefromimg.web.app" target="_blank" rel="noopener">PaletteFromImg</a><a href="https://tonecraft.web.app" target="_blank" rel="noopener">ToneCraft</a><a href="https://autoboostimg.web.app" target="_blank" rel="noopener">AutoBoostIMG</a></div></section>
     </main>
     
 <footer class="site-footer">
@@ -271,6 +343,96 @@ document.getElementById('apply').onclick=apply; document.getElementById('save').
     btn.innerHTML = choose(text) + '<span>' + text + '</span>';
     btn.dataset.iconized = '1';
   });
+})();</script>
+  <script id="round3-script">(function(){
+  const slug = location.hostname.split('.')[0] || location.pathname.split('/').filter(Boolean)[0] || '';
+  const toast = (m) => {
+    let t = document.getElementById('ux-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'ux-toast';
+      t.className = 'ux-toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = m;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 1400);
+  };
+
+  const run = (a) => {
+    const click = (id) => document.getElementById(id)?.click();
+    const set = (id,val) => { const el = document.getElementById(id); if (!el) return; el.value = val; el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true})); };
+
+    if (a==='mono') { set('mode','mono'); click('genBtn'); }
+    if (a==='analog') { set('mode','analog'); click('genBtn'); }
+    if (a==='triad') { set('mode','triad'); click('randBtn'); }
+
+    if (a==='sample_basic') { set('csvInput','name,age,city\nAlice,24,Hanoi\nBob,30,Saigon'); toast('Basic sample loaded.'); }
+    if (a==='sample_product') { set('csvInput','sku,name,price\nP001,Notebook,5.5\nP002,Pencil,1.2'); toast('Product sample loaded.'); }
+    if (a==='convert_now') click('convertBtn');
+
+    if (a==='qr_url') { set('qrText','https://carrotstore.web.app'); click('makeQr'); }
+    if (a==='qr_wifi') { set('qrText','WIFI:T:WPA;S:MyWifi;P:12345678;;'); click('makeQr'); }
+    if (a==='qr_contact') { set('qrText','BEGIN:VCARD\nFN:Tran Thien Thanh\nEMAIL:tranthienthanh93@gmail.com\nTEL:+84978651577\nEND:VCARD'); click('makeQr'); }
+
+    if (a==='tz_utc') { set('toTz','UTC'); click('conv'); }
+    if (a==='tz_ny') { set('toTz','America/New_York'); click('conv'); }
+    if (a==='tz_tokyo') { set('toTz','Asia/Tokyo'); click('conv'); }
+
+    if (a==='path_wave') { set('pathData','M 20 90 Q 95 10 170 90 T 320 90'); click('upd'); }
+    if (a==='path_arc') { set('pathData','M 30 140 A 80 80 0 0 1 190 140 A 80 80 0 0 1 350 140'); click('upd'); }
+    if (a==='path_loop') { set('pathData','M 180 90 m -75,0 a 75,45 0 1,0 150,0 a 75,45 0 1,0 -150,0'); click('upd'); }
+
+    if (a==='scan_now') click('scan');
+    if (a==='copy_agent') { navigator.clipboard.writeText(navigator.userAgent); toast('User Agent copied.'); }
+    if (a==='copy_size') { navigator.clipboard.writeText(screen.width + 'x' + screen.height); toast('Screen size copied.'); }
+
+    if (a==='type_start') click('start');
+    if (a==='type_clear') { set('inputTxt',''); toast('Input cleared.'); }
+    if (a==='type_focus') { document.getElementById('inputTxt')?.focus(); }
+
+    if (a==='collage_make') click('build');
+    if (a==='collage_save') click('download');
+    if (a==='collage_tip') toast('Best result: upload 4-9 photos with similar aspect ratio.');
+
+    if (a==='photo_34') click('gen34');
+    if (a==='photo_46') click('gen46');
+    if (a==='photo_save') click('save');
+
+    if (a==='pal_extract') click('extract');
+    if (a==='pal_copy') click('copyAll');
+    if (a==='pal_tip') toast('Use high-resolution images for better palette extraction.');
+
+    if (a==='tone_soft') { set('br',8); set('ct',12); set('st',10); set('gm',105); }
+    if (a==='tone_punch') { set('br',12); set('ct',28); set('st',26); set('gm',95); }
+    if (a==='tone_reset') { set('br',0); set('ct',0); set('st',0); set('gm',100); }
+
+    if (a==='auto_enhance') click('enhance');
+    if (a==='auto_save') click('save');
+    if (a==='auto_tip') toast('One-click works best on low-contrast images.');
+
+    if (a==='insta_clar') { set('preset','clarendon'); click('apply'); }
+    if (a==='insta_juno') { set('preset','juno'); click('apply'); }
+    if (a==='insta_norm') { set('preset','normal'); click('apply'); }
+
+    if (a==='fx_retro') { set('fx','retro'); click('apply'); }
+    if (a==='fx_half') { set('fx','half'); click('apply'); }
+    if (a==='fx_glitch') { set('fx','glitch'); click('apply'); }
+
+    if (a==='edge_soft') { set('th',26); click('apply'); }
+    if (a==='edge_strong') { set('th',65); click('apply'); }
+    if (a==='edge_apply') click('apply');
+
+    if (a==='tone_bw') { set('mode','bw'); click('apply'); }
+    if (a==='tone_duo') { set('mode','duo'); click('apply'); }
+    if (a==='tone_tri') { set('mode','tri'); click('apply'); }
+  };
+
+  document.querySelectorAll('.quick-btn').forEach((b)=>b.addEventListener('click',()=>run(b.dataset.action)));
+
+  const items = document.querySelectorAll('.tool-ribbon,.quick-actions,.seo-links');
+  const io = new IntersectionObserver((entries)=>entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('revealed'); io.unobserve(e.target);} }), {threshold:0.2});
+  items.forEach(el=>io.observe(el));
 })();</script>
 </body>
 </html>
