@@ -19,69 +19,109 @@
   <link rel="canonical" href="https://edgestroke.web.app/">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <style>:root {
-  --bg: #f6f8fb;
+  --bg: #fff9f7;
   --card: #ffffff;
-  --text: #132238;
-  --muted: #5b6b80;
-  --brand: #0d6efd;
-  --line: #dce3ed;
+  --text: #3a231d;
+  --muted: #876a61;
+  --line: #efdcd5;
+  --g1: #ff512f;
+  --g2: #2ec4b6;
 }
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: "Segoe UI", "Noto Sans", sans-serif;
+  font-family: "Helvetica Neue", "Segoe UI", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top right, #dde9ff 0%, transparent 35%),
-    radial-gradient(circle at bottom left, #d9f5ea 0%, transparent 30%),
-    var(--bg);
+    radial-gradient(circle at 10% 5%, #fff0eb 0%, transparent 32%),
+    radial-gradient(circle at 90% 100%, #ecfff7 0%, transparent 35%),
+    linear-gradient(180deg, #ffffff 0%, var(--bg) 70%);
 }
 .container {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 24px 20px 40px;
+  padding: 26px 20px 44px;
 }
 header {
-  background: var(--card);
+  background: linear-gradient(145deg, #ffffff 0%, #f9fcff 100%);
   border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 14px 32px rgba(19, 34, 56, 0.08);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 13px 30px rgba(58, 35, 29, .13);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
 }
-h1 { margin: 0 0 8px; font-size: 2rem; }
-.sub { margin: 0; color: var(--muted); }
+header::after {
+  content: "";
+  position: absolute;
+  right: -30px;
+  top: -30px;
+  width: 120px;
+  height: 120px;
+  border-radius: 999px;
+  background: linear-gradient(150deg, var(--g1), var(--g2));
+  opacity: .13;
+}
+h1 {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  letter-spacing: .2px;
+}
+.sub { margin: 0; color: var(--muted); line-height: 1.6; }
 main {
   margin-top: 18px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 14px;
   padding: 20px;
-  box-shadow: 0 14px 32px rgba(19, 34, 56, 0.08);
+  box-shadow: 0 13px 30px rgba(58, 35, 29, .13);
 }
 .grid { display: grid; gap: 12px; }
 .grid.two { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-label { display: block; font-weight: 600; margin-bottom: 4px; }
+label { display: block; font-weight: 700; margin-bottom: 6px; color: #223; }
 input, select, textarea, button {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 10px 12px;
+  border-radius: 11px;
+  padding: 11px 12px;
   font: inherit;
 }
-textarea { min-height: 130px; resize: vertical; }
-button {
-  background: linear-gradient(130deg, #0d6efd, #1ba19b);
-  color: #fff;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--g1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--g1) 15%, #ffffff);
 }
-button:hover { opacity: 0.92; }
+textarea { min-height: 132px; resize: vertical; }
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: .2px;
+  background: linear-gradient(120deg, var(--g1), var(--g2));
+  cursor: pointer;
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--g1) 35%, transparent);
+  transition: transform .16s ease, filter .16s ease;
+}
+button:hover { transform: translateY(-1px); filter: saturate(1.05); }
+button:active { transform: translateY(0); }
+.btn-ic {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  flex: 0 0 auto;
+}
 .output, .panel {
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 12px;
-  background: #fbfdff;
+  background: linear-gradient(180deg, #ffffff, #f9fbff);
 }
 .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
 .swatch {
@@ -89,10 +129,12 @@ button:hover { opacity: 0.92; }
   border: 1px solid var(--line);
   overflow: hidden;
   cursor: pointer;
+  transition: transform .14s ease;
 }
+.swatch:hover { transform: translateY(-2px); }
 .swatch div { height: 68px; }
 .swatch code { display: block; text-align: center; padding: 8px; background: #fff; }
-canvas, img.preview {
+canvas, img.preview, svg {
   max-width: 100%;
   border-radius: 12px;
   border: 1px solid var(--line);
@@ -100,19 +142,23 @@ canvas, img.preview {
 }
 .site-footer {
   margin-top: 20px;
-  background: #0d1e33;
-  color: #dfe9f8;
-  border-radius: 16px;
+  background: linear-gradient(135deg, #0f1f33, #112b45);
+  border: 1px solid #1f3b5d;
+  color: #dce8f8;
+  border-radius: 14px;
   padding: 18px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 12px;
 }
-.site-footer h3 { margin: 0 0 8px; color: #fff; }
-.site-footer p { margin: 5px 0; word-break: break-word; }
-.site-footer a { color: #8cc7ff; }
+.site-footer h3 { margin: 0 0 8px; color: #fff; letter-spacing: .2px; }
+.site-footer p { margin: 6px 0; word-break: break-word; }
+.site-footer a { color: #90c8ff; }
 .note { color: var(--muted); font-size: .95rem; }
-</style>
+@media (max-width: 640px) {
+  .container { padding: 14px 12px 28px; }
+  main, header { padding: 16px; }
+}</style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"EdgeStroke","description":"Draw edge-based outlines around subjects for sticker and cutout style.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","url":"https://edgestroke.web.app"}</script>
 </head>
 <body>
@@ -157,5 +203,35 @@ for(let y=1;y<cv.height-1;y++) for(let x=1;x<cv.width-1;x++){
 }
 ctx.putImageData(out,0,0);} 
 document.getElementById('apply').onclick=apply; document.getElementById('save').onclick=()=>{const a=document.createElement('a'); a.href=cv.toDataURL('image/png'); a.download='edgestroke.png'; a.click();};</script>
+  <script id="btn-icon-script">(function(){
+  const icons = {
+    make:'<svg class="btn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+    download:'<svg class="btn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>',
+    convert:'<svg class="btn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h13"/><path d="M13 3l4 4-4 4"/><path d="M20 17H7"/><path d="M11 13l-4 4 4 4"/></svg>',
+    apply:'<svg class="btn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>',
+    copy:'<svg class="btn-ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><rect x="4" y="4" width="11" height="11" rx="2"/></svg>',
+    random:'<svg class="btn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M16 21h5v-5"/><path d="M4 4l7 7"/></svg>',
+    start:'<svg class="btn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
+    scan:'<svg class="btn-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V4h3M20 7V4h-3M4 17v3h3M20 17v3h-3"/><rect x="7" y="7" width="10" height="10" rx="2"/></svg>'
+  };
+  const choose = (txt) => {
+    const t = txt.toLowerCase();
+    if (t.includes('download') || t.includes('save')) return icons.download;
+    if (t.includes('convert')) return icons.convert;
+    if (t.includes('apply') || t.includes('enhance') || t.includes('detect')) return icons.apply;
+    if (t.includes('copy') || t.includes('extract')) return icons.copy;
+    if (t.includes('random')) return icons.random;
+    if (t.includes('start')) return icons.start;
+    if (t.includes('scan')) return icons.scan;
+    if (t.includes('generate') || t.includes('create') || t.includes('build') || t.includes('update')) return icons.make;
+    return icons.make;
+  };
+  document.querySelectorAll('button').forEach((btn) => {
+    const text = btn.textContent.trim();
+    if (!text || btn.dataset.iconized === '1') return;
+    btn.innerHTML = choose(text) + '<span>' + text + '</span>';
+    btn.dataset.iconized = '1';
+  });
+})();</script>
 </body>
 </html>
