@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://edgestroke.web.app/sitemap.xml
