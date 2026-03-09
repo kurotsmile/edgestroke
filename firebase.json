@@ -6,7 +6,11 @@
       ".firebaserc",
       "README.md",
       ".git/**",
-      "**/.*"
+      "**/.*",
+      "**/*.command",
+      "**/*.cmd",
+      "**/*.md",
+      "**/*.bat"
     ],
     "cleanUrls": true
   }
