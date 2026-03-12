@@ -13,12 +13,6 @@ Draw edge-based outlines around subjects for sticker and cutout style.
 - Static hosting-ready Firebase config
 - Footer includes Contact and Donation sections
 
-## Run Local Test Server
-- macOS/Linux: `./run_web.command`
-- Windows: `run_web.bat`
-- Windows Incognito: `run_web_incognito.cmd`
-- URL: `http://localhost:8115/index.html`
-
 ## Firebase Hosting Deploy (account: nguyennhung2672@gmail.com)
 1. Login: `firebase login --reauth`
 2. Verify account is `nguyennhung2672@gmail.com`
@@ -40,6 +34,3 @@ This project is initialized with local Git config:
 - `favicon.svg`
 - `firebase.json`
 - `.firebaserc`
-- `run_web.command`
-- `run_web.bat`
-- `run_web_incognito.cmd`
